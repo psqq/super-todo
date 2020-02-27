@@ -1,0 +1,14 @@
+{
+  "name": "super-todo",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/psqq/super-todo.git",
+  "author": "Sergey Pestov <pestov-sa@yandex.ru>",
+  "license": "MIT",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "koa": "^2.11.0"
+  }
+}
