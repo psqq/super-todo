@@ -1,8 +1,26 @@
 const Koa = require('koa');
-const app = new Koa();
+const Router = require('koa-router');
+const bodyParser = require('koa-bodyparser');
 
-app.use(async ctx => {
-  ctx.body = 'Hello World';
+const app = new Koa();
+const router = new Router();
+
+router.get('/', async (ctx, next) => {
+    ctx.body = 'Hello World';
 });
+
+router.get('/hello', async (ctx, next) => {
+    ctx.body = '<b>Hello World</b>';
+});
+
+app.use(bodyParser());
+router.post('/api', async (ctx, next) => {
+    const data = ctx.request.body;
+    ctx.body = data;
+});
+
+app
+  .use(router.routes())
+  .use(router.allowedMethods());
 
 app.listen(3000);
