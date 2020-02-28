@@ -117,17 +117,17 @@ class GoogleDrive extends Drive {
       });
     });
   }
-  async uploadFile(filename, contents) {
-    var fileMetadata = {
-      'name': filename,
-      'parents': ['appDataFolder']
-    };
-    var media = {
-      mimeType: 'text',
-      body: contents
-    };
-    return new Promise((resolve, rejects) => {
-      drive.files.create({
+  async createFile(filename, contents) {
+    return new Promise((resolve, reject) => {
+      var fileMetadata = {
+        'name': filename,
+        'parents': ['appDataFolder']
+      };
+      var media = {
+        mimeType: 'text/plain',
+        body: contents
+      };
+      this.drive.files.create({
         resource: fileMetadata,
         media: media,
         fields: 'id'
@@ -135,13 +135,57 @@ class GoogleDrive extends Drive {
         if (err) {
           // Handle error
           console.error(err);
-          rejects(err);
+          return reject(err);
         } else {
           console.log('File Id:', file.data.id);
-          resolve(file.data.id);
+          return resolve(file.data.id);
         }
       });
     });
+  }
+  async updateFile(id, filename, contents) {
+    return new Promise((resolve, reject) => {
+      var fileMetadata = {
+        'name': filename,
+        'parents': ['appDataFolder']
+      };
+      var media = {
+        mimeType: 'text/plain',
+        body: contents
+      };
+      this.drive.files.update({
+        uploadType: 'media',
+        fileId: id,
+        fileMetadata,
+        media,
+      }, function (err, file) {
+        if (err) {
+          return reject(err);
+        } else {
+          return resolve(id);
+        }
+      });
+    });
+  }
+  async uploadFile(filename, contents) {
+    let id;
+    try {
+      id = await this.getIdByFilename(filename);
+      await this.updateFile(id, filename, contents);
+      return id;
+    } catch (err) {
+      console.error(err);
+      return await this.createFile(filename, contents);
+    }
+  }
+  async downloadFile(filename) {
+    let id = await this.getIdByFilename(filename);
+    let file = await this.drive.files.get({
+      fileId: id,
+      alt: 'media',
+      fields: '*'
+    });
+    return file.data;
   }
 }
 
