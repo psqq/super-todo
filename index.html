@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document</title>
+  <title>Super todo</title>
 </head>
 
 <body>
@@ -172,10 +172,13 @@
       }
     }
   </script>
-  <script src="https://apis.google.com/js/api.js"
-    onload="this.onload=function(){}; gapi.load('client:auth2', initClient)"
-    onreadystatechange="if (this.readyState === 'complete') this.onload()">
-    </script>
+  <script src="https://apis.google.com/js/api.js"></script>
+  <script>
+    function start() {
+      initClient();
+    };
+    gapi.load('client', start);
+  </script>
 </body>
 
 </html>
