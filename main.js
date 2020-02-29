@@ -10,12 +10,20 @@ class List {
       s += `<li>${item}</li>`;
     }
     s = `<ul>${s}</ul>`;
-    el.innerHTML = s;
+    renderHtml(el, s);
   }
 }
 
+function renderHtml(parent, htmlStr) {
+  if (!parent) parent = document.body;
+  parent.innerHTML = htmlStr;
+}
+
+function makeButton(title, fn) {
+  return `<button onclick="${fn.name}()">${title}</button>`
+}
+
 function showListOfFiles(el) {
-  if (!el) el = document.body;
   let i = 0;
   let list = new List();
   while (1) {
@@ -26,15 +34,14 @@ function showListOfFiles(el) {
     list.add(key);
     i++;
   }
-  list.add(`<button onclick="showMainMenu()">Show main menu</button>`);
+  list.add(makeButton("Show main menu", showMainMenu));
   list.render(el);
 }
 
 
 function showMainMenu(el) {
-  if (!el) el = document.body;
   let list = new List();
-  list.add(`<button onclick="showListOfFiles()">Show list of files</button>`);
+  list.add(makeButton("Show list of files", showListOfFiles));
   list.render(el);
 }
 
