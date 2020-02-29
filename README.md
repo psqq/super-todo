@@ -1,2 +1,3 @@
-# super-todo
- Todo for programmers
+# Super Todo
+
+Todo for programmers
