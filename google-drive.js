@@ -149,7 +149,7 @@ async function initApp() {
   // await upload(id, 'Hello, World!');
   // let s = await download(id);
   // console.log(s);
-  if (!isLoggedIn()) {
-    await logIn();
-  }
+  // if (!isLoggedIn()) {
+  //   await logIn();
+  // }
 }
