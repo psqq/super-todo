@@ -145,11 +145,7 @@ async function deleteFile(fileId) {
 }
 
 async function initApp() {
-  // let id = await createEmptyFile('hello.txt', 'text/plain');
-  // await upload(id, 'Hello, World!');
-  // let s = await download(id);
-  // console.log(s);
-  // if (!isLoggedIn()) {
-  //   await logIn();
-  // }
+  if (!isLoggedIn()) {
+    await logIn();
+  }
 }
