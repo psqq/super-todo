@@ -8,15 +8,19 @@
 </head>
 
 <body>
+  <div class="app"></div>
   <script src="./google-drive.js"></script>
+  <script src="./main.js"></script>
+  <script src="./lib/redom.min.js"></script>
   <script src="https://apis.google.com/js/api.js"></script>
   <script>
     function start() {
+      changeLoadingStatus('starting googleapi client initilazing');
       initClient();
     };
-    // gapi.load('client', start);
+    changeLoadingStatus('starting load googleapi client');
+    gapi.load('client', start);
   </script>
-  <script src="./main.js"></script>
 </body>
 
 </html>

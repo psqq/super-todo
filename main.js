@@ -1,3 +1,5 @@
+const defaultEl = document.querySelector('.app');
+const { el, mount } = redom;
 
 class List {
   items = [];
@@ -6,38 +8,52 @@ class List {
   }
   render(el) {
     let s = '';
-    for(let item of this.items) {
+    for (let item of this.items) {
       s += `<li>${item}</li>`;
     }
     s = `<ul>${s}</ul>`;
-    renderHtml(el, s);
+    renderHtml(s, el);
   }
 }
 
-function renderHtml(parent, htmlStr) {
-  if (!parent) parent = document.body;
+function getJsonItem(key) {
+  return JSON.parse(localStorage.getItem(key));
+}
+
+function renderHtml(htmlStr, parent) {
+  if (!parent) parent = defaultEl;
   parent.innerHTML = htmlStr;
 }
 
-function makeButton(title, fn) {
-  return `<button onclick="${fn.name}()">${title}</button>`
+function renderRedom(elForRender, parent) {
+  if (!parent) parent = defaultEl;
+  redom.
+}
+
+function makeButton(title, fn, ...args) {
+  return `<button onclick="${fn.name}(${args.join(',')})">${title}</button>`
+}
+
+function editFile(id) {
+  let file = getJsonItem(id);
+  console.log(file);
+  renderHtml(`
+    <b>${file.name}</b><br>
+    <textarea>${file.content}</textarea><br>
+    ${makeButton("Show main menu", showMainMenu)}
+  `);
 }
 
 function showListOfFiles(el) {
-  let i = 0;
   let list = new List();
-  while (1) {
-    let key  = localStorage.key(i);
-    if (!key) {
-      break;
-    }
-    list.add(key);
-    i++;
+  let files = getJsonItem('files');
+  for (let { id, name } of files) {
+    list.add(name);
+    list.add(makeButton("edit", editFile, `'${id}'`));
   }
   list.add(makeButton("Show main menu", showMainMenu));
   list.render(el);
 }
-
 
 function showMainMenu(el) {
   let list = new List();
@@ -45,4 +61,20 @@ function showMainMenu(el) {
   list.render(el);
 }
 
-showMainMenu();
+let loadingStatus = '';
+
+function showLoading() {
+  renderHtml(`Loading... ${loadingStatus}`);
+}
+
+function changeLoadingStatus(newStatus) {
+  console.log(newStatus);
+  loadingStatus = newStatus;
+  showLoading();
+}
+
+function stopLoading() {
+  showMainMenu();
+}
+
+showLoading();

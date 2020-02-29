@@ -1,3 +1,4 @@
+
 function initClient() {
   gapi.client.init({
     // Ваш ключ API
@@ -38,7 +39,7 @@ function logIn() {
 
 function logOut() {
   if (isGapiLoaded()) {
-    gapi.auth2.getAuthInstance().signOut()
+    return gapi.auth2.getAuthInstance().signOut()
   }
 }
 
@@ -113,17 +114,24 @@ async function find(query) {
   let ret = []
   let token
   do {
-    const resp = await prom(gapi.client.drive.files.list, {
+    console.log(1);
+    const options = {
       // вместо 'appDataFolder' можно использовать ID папки
       spaces: 'appDataFolder',
       fields: 'files(id, name), nextPageToken',
       pageSize: 100,
-      pageToken: token,
       orderBy: 'createdTime',
-      q: query
-    })
+    };
+    if (token) {
+      options.token = token;
+    }
+    if (query) {
+      options.q = token;
+    }
+    const resp = await prom(gapi.client.drive.files.list, options);
+    console.log(2);
     ret = ret.concat(resp.result.files)
-    token = resp.result.nextPageToken
+    token = resp.result.nextPageToken;
   } while (token)
   // результат: массив объектов вида [{id: '...', name: '...'}], 
   // отсортированных по времени создания
@@ -146,6 +154,18 @@ async function deleteFile(fileId) {
 
 async function initApp() {
   if (!isLoggedIn()) {
+    changeLoadingStatus('login');
     await logIn();
   }
+  changeLoadingStatus('loading files');
+  let files = await find();
+  localStorage.setItem('files', JSON.stringify(files));
+  for (let { id, name } of files) {
+    changeLoadingStatus(`loading file ${name} (${id})`);
+    let content = await download(id);
+    localStorage.setItem(id, JSON.stringify({
+      id, name, content
+    }));
+  }
+  stopLoading();
 }
