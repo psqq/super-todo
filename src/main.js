@@ -1,5 +1,4 @@
-const defaultEl = document.querySelector('.app');
-const { el, mount } = redom;
+const defaultEl = document.querySelector('#app');
 
 class List {
   items = [];
@@ -27,7 +26,6 @@ function renderHtml(htmlStr, parent) {
 
 function renderRedom(elForRender, parent) {
   if (!parent) parent = defaultEl;
-  redom.
 }
 
 function makeButton(title, fn, ...args) {

@@ -1,9 +1,6 @@
 
 function initClient() {
   gapi.client.init({
-    // Ваш ключ API
-    apiKey: 'AIzaSyA99fHqZ_0l5GxHxh5mwduvAFFgddaurXM',
-
     // Ваш идентификатор клиента
     clientId: '484762285022-a74l5r4fq7gk71p4b0j0199lkkdjetcf.apps.googleusercontent.com',
 
