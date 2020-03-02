@@ -17,7 +17,8 @@ function initClient() {
     initApp()
 
   }, error => {
-    console.log('Failed to init GAPI client', error)
+    console.log('Failed to init GAPI client', error);
+    changeGoogleDriveStatus('Failed to init GAPI client');
     // работаем без гугла
     initApp({ showAlert: 'google-init-failed-alert' })
   })
@@ -151,18 +152,19 @@ async function deleteFile(fileId) {
 
 async function initApp() {
   if (!isLoggedIn()) {
-    changeLoadingStatus('login');
+    changeGoogleDriveStatus('login');
     await logIn();
   }
-  changeLoadingStatus('loading files');
+  changeGoogleDriveStatus('loading files');
   let files = await find();
   localStorage.setItem('files', JSON.stringify(files));
   for (let { id, name } of files) {
-    changeLoadingStatus(`loading file ${name} (${id})`);
+    changeGoogleDriveStatus(`loading file ${name} (${id})`);
     let content = await download(id);
     localStorage.setItem(id, JSON.stringify({
       id, name, content
     }));
   }
-  stopLoading();
+  changeGoogleDriveStatus('All files loaded');
+  state.googleDrive.firstInitDone = true;
 }
