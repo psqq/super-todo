@@ -37,12 +37,13 @@
     <div class="list-of-files">
       <file-item v-for="(file, idx) in files" v-bind:key="file.id" v-bind:idx="idx">
       </file-item>
+      <button v-on:click="addFile">Add file</button>
     </div>
     <div class="loading">
-      {{ googleDrive.statusMsg }}
+      <!-- {{ googleDrive.statusMsg }} -->
     </div>
     <div class="status-bar">
-      {{ statusBar.msg }}
+      Last msg: {{ statusBar.msg }}
     </div>
   </div>
   <script src="./src/google-drive.js"></script>

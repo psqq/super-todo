@@ -37,6 +37,11 @@ const fileEditor = Vue.component('file-editor', {
   methods: {
     save: async function (event) {
       state.statusBar.msg = `saving file ${state.currentFile.name}...`;
+      localStorage.setItem(state.currentFile.id, JSON.stringify({
+        id: state.currentFile.id,
+        name: state.currentFile.name,
+        content: state.currentFile.content,
+      }));
       await upload(state.currentFile.id, state.currentFile.content);
       state.statusBar.msg = `file ${state.currentFile.name} saved!`;
     },
@@ -78,6 +83,14 @@ const mainMenu = Vue.component('main-menu', {
 const listOfFiles = Vue.component('list-of-files', {
   template: getTemplate('.list-of-files'),
   data: () => state,
+  methods: {
+    addFile: async function (event) {
+      const name = prompt("Filename");
+      state.statusBar.msg = 'Creating new empty file...';
+      await createEmptyFile(name);
+      reloadFiles();
+    }
+  }
 });
 
 const statusBar = Vue.component('status-bar', {
@@ -110,4 +123,5 @@ new Vue({
 function changeGoogleDriveStatus(newStatus) {
   console.log(newStatus);
   state.googleDrive.statusMsg = newStatus;
+  state.statusBar.msg = newStatus;
 }

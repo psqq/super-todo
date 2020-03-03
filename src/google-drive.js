@@ -150,16 +150,8 @@ async function deleteFile(fileId) {
   }
 }
 
-async function initApp(withGoogle) {
-  state.googleDrive.clientInited = withGoogle;
-  if (!withGoogle) {
-    state.googleDrive.firstInitDone = true;
-    return;
-  }
-  if (!isLoggedIn()) {
-    changeGoogleDriveStatus('login');
-    await logIn();
-  }
+async function reloadFiles() {
+  state.googleDrive.firstInitDone = false;
   changeGoogleDriveStatus('loading files');
   let files = await find();
   localStorage.setItem('files', JSON.stringify(files));
@@ -175,4 +167,17 @@ async function initApp(withGoogle) {
   state.files = files;
   changeGoogleDriveStatus('All files loaded');
   state.googleDrive.firstInitDone = true;
+}
+
+async function initApp(withGoogle) {
+  state.googleDrive.clientInited = withGoogle;
+  if (!withGoogle) {
+    state.googleDrive.firstInitDone = true;
+    return;
+  }
+  if (!isLoggedIn()) {
+    changeGoogleDriveStatus('login');
+    await logIn();
+  }
+  reloadFiles();
 }
