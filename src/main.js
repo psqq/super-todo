@@ -39,6 +39,9 @@ const fileEditor = Vue.component('file-editor', {
       state.statusBar.msg = `saving file ${state.currentFile.name}...`;
       await upload(state.currentFile.id, state.currentFile.content);
       state.statusBar.msg = `file ${state.currentFile.name} saved!`;
+    },
+    back: function (event) {
+      state.currentComponent = mainMenu;
     }
   },
 });

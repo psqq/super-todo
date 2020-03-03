@@ -15,6 +15,7 @@
   <div class="app">
     <div>
       <status-bar></status-bar>
+      <hr>
       <app></app>
     </div>
   </div>
@@ -22,7 +23,8 @@
     <div class="file-editor">
       <textarea v-model="currentFile.content"></textarea>
       <hr>
-      <button v-on:click="save">save</button>
+      <button v-on:click="save">save</button> |
+      <button v-on:click="back">back</button>
     </div>
     <div class="file-item">
       {{ name }}: <button v-on:click="edit">edit</button>
