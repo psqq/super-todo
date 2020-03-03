@@ -32,6 +32,8 @@ function logIn() {
   if (isGapiLoaded()) {
     // откроется стандартное окно Google с выбором аккаунта
     return gapi.auth2.getAuthInstance().signIn()
+  } else {
+    changeGoogleDriveStatus('Error: gapi is not loaded!');
   }
 }
 
@@ -143,6 +145,7 @@ async function deleteFile(fileId) {
     })
     return true
   } catch (err) {
+    changeGoogleDriveStatus(err);
     if (err.status === 404) {
       return false
     }
@@ -177,7 +180,11 @@ async function initApp(withGoogle) {
   }
   if (!isLoggedIn()) {
     changeGoogleDriveStatus('login');
-    await logIn();
+    try {
+      await logIn();
+    } catch (err) {
+      changeGoogleDriveStatus(err);
+    }
   }
   reloadFiles();
 }

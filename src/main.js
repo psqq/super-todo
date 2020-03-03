@@ -66,6 +66,15 @@ const fileItem = Vue.component('file-item', {
       this.currentFile.name = this.files[this.idx].name;
       this.currentFile.content = getFileContent(this.files[this.idx].id);
       state.currentComponent = fileEditor;
+    },
+    deleteFile: async function (event) {
+      state.statusBar.msg = 'Confirm deleting file...';
+      if (confirm(`Delete file ${this.files[this.idx].name}?`)) {
+        state.statusBar.msg = 'Deleting file...';
+        await deleteFile(this.files[this.idx].id);
+        state.statusBar.msg = 'File deleted...';
+        reloadFiles();
+      }
     }
   },
 });
