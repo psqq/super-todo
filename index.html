@@ -13,23 +13,34 @@
 
 <body>
   <div class="app">
-    <app></app>
+    <div>
+      <status-bar></status-bar>
+      <app></app>
+    </div>
   </div>
   <div style="display:none">
+    <div class="file-editor">
+      <textarea v-model="currentFile.content"></textarea>
+      <hr>
+      <button v-on:click="save">save</button>
+    </div>
+    <div class="file-item">
+      {{ name }}: <button v-on:click="edit">edit</button>
+    </div>
     <div class="main-menu">
       Main menu
       <hr>
       <button v-on:click="gotoListOfFiles">List of files</button>
     </div>
     <div class="list-of-files">
-      <div v-for="file in files" :key="file.name">
-        {{ file.name }}
-        <span v-on:click="edit({{file.id}})">edit</span>
-        <hr>
-      </div>
+      <file-item v-for="(file, idx) in files" v-bind:key="file.id" v-bind:idx="idx">
+      </file-item>
     </div>
     <div class="loading">
       {{ googleDrive.statusMsg }}
+    </div>
+    <div class="status-bar">
+      {{ statusBar.msg }}
     </div>
   </div>
   <script src="./src/google-drive.js"></script>

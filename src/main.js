@@ -3,7 +3,14 @@ function getTemplate(sel) {
   return document.querySelector(sel).outerHTML;
 }
 
+function getFileContent(id) {
+  return JSON.parse(localStorage.getItem(id)).content;
+}
+
 const state = {
+  statusBar: {
+    msg: '',
+  },
   currentComponent: null,
   googleDrive: {
     statusMsg: '',
@@ -11,19 +18,49 @@ const state = {
     clientInited: false,
   },
   files: [],
+  currentFile: {
+    id: '',
+    name: '',
+    content: '',
+  },
 };
 
-// const fileItem = Vue.component('main-menu', {
-//   template: getTemplate('.file-item'),
-//   data: () => state,
-//   methods: {
-//     edit: function (event) {
-//       console.log(edit);
-//     }
-//   },
-//   render: (h) => {
-//   },
-// });
+const fileEditor = Vue.component('file-editor', {
+  template: getTemplate('.file-editor'),
+  data: () => state,
+  props: ['idx'],
+  computed: {
+    content: function () {
+      return getFileContent(this.files[this.idx].id);
+    }
+  },
+  methods: {
+    save: async function (event) {
+      state.statusBar.msg = `saving file ${state.currentFile.name}...`;
+      await upload(state.currentFile.id, state.currentFile.content);
+      state.statusBar.msg = `file ${state.currentFile.name} saved!`;
+    }
+  },
+});
+
+const fileItem = Vue.component('file-item', {
+  template: getTemplate('.file-item'),
+  data: () => state,
+  props: ['idx'],
+  computed: {
+    name: function () {
+      return this.files[this.idx].name;
+    }
+  },
+  methods: {
+    edit: function (event) {
+      this.currentFile.id = this.files[this.idx].id;
+      this.currentFile.name = this.files[this.idx].name;
+      this.currentFile.content = getFileContent(this.files[this.idx].id);
+      state.currentComponent = fileEditor;
+    }
+  },
+});
 
 const mainMenu = Vue.component('main-menu', {
   template: getTemplate('.main-menu'),
@@ -37,6 +74,11 @@ const mainMenu = Vue.component('main-menu', {
 
 const listOfFiles = Vue.component('list-of-files', {
   template: getTemplate('.list-of-files'),
+  data: () => state,
+});
+
+const statusBar = Vue.component('status-bar', {
+  template: getTemplate('.status-bar'),
   data: () => state,
 });
 
