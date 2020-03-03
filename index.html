@@ -5,6 +5,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Super todo</title>
+  <script src="./lib/eventemitter.js"></script>
   <script src="https://unpkg.com/vue@2.6.11/dist/vue.js"></script>
   <!-- <script src="https://unpkg.com/page@1.11.5/page.js"></script>
   <script src="https://unpkg.com/htm@3.0.3/dist/htm.js"></script> -->
@@ -35,9 +36,11 @@
       </div>
     </div>
     <div class="main-menu">
-      Main menu
-      <hr>
-      <button v-on:click="gotoListOfFiles">List of files</button>
+      <div>Main menu</div>
+      <div class="buttons">
+        <button v-on:click="gotoListOfFiles">List of files</button>
+        <button v-on:click="gotoTasks">Tasks</button>
+      </div>
     </div>
     <div class="list-of-files">
       <div class="buttons">

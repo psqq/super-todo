@@ -94,7 +94,8 @@ async function upload(fileId, content) {
     path: `/upload/drive/v3/files/${fileId}`,
     method: 'PATCH',
     params: { uploadType: 'media' },
-    body: typeof content === 'string' ? content : JSON.stringify(content)
+    body: content,
+    // body: typeof content === 'string' ? content : JSON.stringify(content)
   })
 }
 
@@ -107,7 +108,8 @@ async function download(fileId) {
   // resp.result — это попытка интерпретировать resp.body как JSON.
   // Если она провалилась, значение resp.result будет false
   // Т.о. функция возвращает либо объект, либо строку
-  return resp.result || resp.body
+  // return resp.result || resp.body
+  return resp.body
 }
 
 async function find(query) {
@@ -158,17 +160,18 @@ async function reloadFiles() {
   changeGoogleDriveStatus('loading files');
   let files = await find();
   localStorage.setItem('files', JSON.stringify(files));
-  let i = 0;
-  for (let { id, name } of files) {
-    i++;
-    changeGoogleDriveStatus(`loading file ${name} (${i} / ${files.length})`);
-    let content = await download(id);
-    localStorage.setItem(id, JSON.stringify({
-      id, name, content
-    }));
-  }
+  // let i = 0;
+  // for (let { id, name } of files) {
+  //   i++;
+  //   changeGoogleDriveStatus(`loading file ${name} (${i} / ${files.length})`);
+  //   let content = await download(id);
+  //   localStorage.setItem(id, JSON.stringify({
+  //     id, name, content
+  //   }));
+  // }
   state.files = files;
-  changeGoogleDriveStatus('All files loaded');
+  // changeGoogleDriveStatus('All files loaded');
+  changeGoogleDriveStatus('List of files loaded');
   state.googleDrive.firstInitDone = true;
 }
 
@@ -187,4 +190,17 @@ async function initApp(withGoogle) {
     }
   }
   reloadFiles();
+}
+
+class GoogleDrive {
+  constructor(gapi) {
+    this.gapi = gapi;
+  }
+  loadClient() {
+    return new Promise((res, rej) => {
+      gapi.load('client', () => {
+        res();
+      });
+    })
+  }
 }

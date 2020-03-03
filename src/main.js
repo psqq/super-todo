@@ -3,8 +3,11 @@ function getTemplate(sel) {
   return document.querySelector(sel).outerHTML;
 }
 
-function getFileContent(id) {
-  return JSON.parse(localStorage.getItem(id)).content;
+async function getFileContent(id) {
+  state.statusBar.msg = `Downloading file ${state.currentFile.name}...`;
+  let cont = await download(id);
+  state.statusBar.msg = `Downloading file ${state.currentFile.name}... done!`;
+  return cont;
 }
 
 const state = {
@@ -61,10 +64,10 @@ const fileItem = Vue.component('file-item', {
     }
   },
   methods: {
-    edit: function (event) {
+    edit: async function (event) {
       this.currentFile.id = this.files[this.idx].id;
       this.currentFile.name = this.files[this.idx].name;
-      this.currentFile.content = getFileContent(this.files[this.idx].id);
+      this.currentFile.content = await getFileContent(this.files[this.idx].id);
       state.currentComponent = fileEditor;
     },
     deleteFile: async function (event) {
@@ -85,7 +88,10 @@ const mainMenu = Vue.component('main-menu', {
   methods: {
     gotoListOfFiles: function (event) {
       this.currentComponent = listOfFiles;
-    }
+    },
+    gotoTasks: function (event) {
+      this.currentComponent = listOfFiles;
+    },
   }
 });
 
