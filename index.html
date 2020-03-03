@@ -6,13 +6,31 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Super todo</title>
   <script src="https://unpkg.com/vue@2.6.11/dist/vue.js"></script>
-  <script src="https://unpkg.com/page@1.11.5/page.js"></script>
+  <!-- <script src="https://unpkg.com/page@1.11.5/page.js"></script>
+  <script src="https://unpkg.com/htm@3.0.3/dist/htm.js"></script> -->
   <link rel="stylesheet" href="./assets/main.css">
 </head>
 
 <body>
-  <div id="app">
-    <slot></slot>
+  <div class="app">
+    <app></app>
+  </div>
+  <div style="display:none">
+    <div class="main-menu">
+      Main menu
+      <hr>
+      <button v-on:click="gotoListOfFiles">List of files</button>
+    </div>
+    <div class="list-of-files">
+      <div v-for="file in files" :key="file.name">
+        {{ file.name }}
+        <span v-on:click="edit({{file.id}})">edit</span>
+        <hr>
+      </div>
+    </div>
+    <div class="loading">
+      {{ googleDrive.statusMsg }}
+    </div>
   </div>
   <script src="./src/google-drive.js"></script>
   <script src="./src/main.js"></script>
