@@ -98,7 +98,10 @@ const listOfFiles = Vue.component('list-of-files', {
       state.statusBar.msg = 'Creating new empty file...';
       await createEmptyFile(name);
       reloadFiles();
-    }
+    },
+    back: function (event) {
+      state.currentComponent = mainMenu;
+    },
   }
 });
 

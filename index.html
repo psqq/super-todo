@@ -16,18 +16,23 @@
     <div>
       <status-bar></status-bar>
       <hr>
-      <app></app>
     </div>
+    <app></app>
   </div>
   <div style="display:none">
     <div class="file-editor">
+      <div class="buttons">
+        <button v-on:click="save">save</button>
+        <button v-on:click="back">back</button>
+      </div>
       <textarea v-model="currentFile.content"></textarea>
-      <hr>
-      <button v-on:click="save">save</button> |
-      <button v-on:click="back">back</button>
     </div>
     <div class="file-item">
-      {{ name }}: <button v-on:click="edit">edit</button> | <button v-on:click="deleteFile">delete</button>
+      <div class="file-name">{{ name }}</div>
+      <div class="buttons">
+        <button v-on:click="edit">edit</button>
+        <button v-on:click="deleteFile">delete</button>
+      </div>
     </div>
     <div class="main-menu">
       Main menu
@@ -35,9 +40,14 @@
       <button v-on:click="gotoListOfFiles">List of files</button>
     </div>
     <div class="list-of-files">
-      <file-item v-for="(file, idx) in files" v-bind:key="file.id" v-bind:idx="idx">
-      </file-item>
-      <button v-on:click="addFile">Add file</button>
+      <div class="buttons">
+        <button v-on:click="addFile">Add file</button>
+        <button v-on:click="back">back</button>
+      </div>
+      <div class="file-items">
+        <file-item v-for="(file, idx) in files" v-bind:key="file.id" v-bind:idx="idx">
+        </file-item>
+      </div>
     </div>
     <div class="loading">
       <!-- {{ googleDrive.statusMsg }} -->
